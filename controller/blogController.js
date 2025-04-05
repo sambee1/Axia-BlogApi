@@ -47,12 +47,24 @@ const updateBlog = async (req, res, next) => {
 }
 
 const deleteBlog = async (req, res, next) => {
+    const userRole = req.user.role
+    const userId = req.user._id
     const {id} = req.params
-    try{
+    const author = await blogModel.findOne({_id: id})
+
+    //admin or user who created the blog can delete the blog
+    if(userRole == "admin" || author.author.toHexString() === userId.toHexString()){        
+try{
         await blogModel.findByIdAndDelete(id)
         res.status(200).json({mess:"Blog deleted"})
     } catch (err){
         next({status:404, message:"No blog to be deleted with such ID"})
     }
+}else{
+    res.status(403).send({message: "User not authorized"})
+}
+    
+   
+    
 }
 module.exports = {createABlog, getAllBlogs, getOneBlog, updateBlog, deleteBlog}

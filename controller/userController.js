@@ -63,27 +63,7 @@ if (paramId){
 
 }
 
-const profileUpdate = async(req, res) =>{
-    const tokenId = req.user.id  
-    const reqId = req.params.id
-    const {country, phoneNumber, street, bio} = req.body
-    if(tokenId === reqId){
-        try{
-            await userModel.findByIdAndUpdate(tokenId, {
-                $set: {
-                    "kyc.country": country,
-                    "kyc.phoneNumber": phoneNumber,
-                    "kyc.street": street,
-                    "kyc.bio": bio,
-                }
-            }, {new:true})
-        } catch(error){
-            console.log(error)
-        }
-    }else{
-        console.log("access denied")
-    }
-}
 
 
-module.exports = {register, userLogin,  deleteUser, profileUpdate}
+
+module.exports = {register, userLogin,  deleteUser}
